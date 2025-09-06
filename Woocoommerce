@@ -1,0 +1,24 @@
+<?php
+/**
+ * Plugin Name: WooCommerce UPI Only Gateway
+ * Plugin URI: https://yourwebsite.com/
+ * Description: Accept payments via UPI only in WooCommerce. Customers can pay using any UPI app via QR code or UPI link.
+ * Version: 1.0.0
+ * Author: Your Name
+ * License: GPL2
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+add_action('plugins_loaded', 'upi_init_gateway_class');
+
+function upi_init_gateway_class() {
+    if (!class_exists('WC_Payment_Gateway')) return;
+
+    require_once plugin_dir_path(__FILE__) . 'includes/class-upi-gateway.php';
+
+    add_filter('woocommerce_payment_gateways', function($methods) {
+        $methods[] = 'WC_Gateway_UPI';
+        return $methods;
+    });
+}
